@@ -3,9 +3,6 @@
 use hex;
 
 pub fn run(hex_input1: &str, hex_input2: &str) -> String {
-    let is_symmetric = check_symmetry(hex_input1, hex_input2);
-    assert!(is_symmetric, "Inputs (buffers) should have equal length");
-
     // XOR truth table:
     // x  y  XOR
     // 0  0  0
@@ -20,11 +17,14 @@ pub fn run(hex_input1: &str, hex_input2: &str) -> String {
     return hex::encode(xor_result);
 }
 
-fn check_symmetry(hex_str1: &str, hex_str2: &str) -> bool {
+fn check_symmetry(hex_str1: &Vec<u8>, hex_str2: &Vec<u8>) -> bool {
     return hex_str1.len() == hex_str2.len();
 }
 
 fn xor_bytes(a: Vec<u8>, b: Vec<u8>) -> Vec<u8> {
+    let is_symmetric = check_symmetry(&a, &b);
+    assert!(is_symmetric, "Inputs (buffers) should have equal length");
+
     let mut result = Vec::new();
 
     let min_length = a.len(); // since lengths are the same (checked before) we can use any vector's size
@@ -68,10 +68,16 @@ mod tests {
         let hex_input2 = "686974207468652062756c6c277320657965";
         let hex_input3 = "1111";
 
-        let check1 = check_symmetry(hex_input, hex_input2);
+        let check1 = check_symmetry(
+            &hex::decode(hex_input).unwrap(),
+            &hex::decode(hex_input2).unwrap(),
+        );
         assert!(check1);
 
-        let check2 = check_symmetry(hex_input, hex_input3);
+        let check2 = check_symmetry(
+            &hex::decode(hex_input).unwrap(),
+            &hex::decode(hex_input3).unwrap(),
+        );
         assert!(!check2);
     }
 }
