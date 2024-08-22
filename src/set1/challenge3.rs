@@ -7,7 +7,7 @@ pub fn run(encrypted_xor_input: &str) -> (u8, Vec<u8>) {
     return decrypt_single_byte_xor(&encrypted_input_bytes);
 }
 
-fn decrypt_single_byte_xor(input_as_bytes: &Vec<u8>) -> (u8, Vec<u8>) {
+pub fn decrypt_single_byte_xor(input_as_bytes: &Vec<u8>) -> (u8, Vec<u8>) {
     let mut best_score = f64::MIN;
     let mut best_key = 0;
     let mut best_text = vec![];
