@@ -2,6 +2,8 @@
 
 use hex;
 
+use crate::utils::xor::xor_utilities::xor_bytes;
+
 pub fn run(hex_input1: &str, hex_input2: &str) -> String {
     // XOR truth table:
     // x  y  XOR
@@ -17,28 +19,10 @@ pub fn run(hex_input1: &str, hex_input2: &str) -> String {
     return hex::encode(xor_result);
 }
 
-fn check_symmetry(hex_str1: &Vec<u8>, hex_str2: &Vec<u8>) -> bool {
-    return hex_str1.len() == hex_str2.len();
-}
-
-fn xor_bytes(a: Vec<u8>, b: Vec<u8>) -> Vec<u8> {
-    let is_symmetric = check_symmetry(&a, &b);
-    assert!(is_symmetric, "Inputs (buffers) should have equal length");
-
-    let mut result = Vec::new();
-
-    let min_length = a.len(); // since lengths are the same (checked before) we can use any vector's size
-
-    for i in 0..min_length {
-        result.push(a[i] ^ b[i]); // XOR the corresponding elements and push to the result
-    }
-
-    return result;
-}
-
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::utils::xor::xor_utilities::check_symmetry;
 
     #[test]
     fn test_run() {

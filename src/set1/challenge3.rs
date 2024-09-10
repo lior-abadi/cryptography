@@ -2,6 +2,8 @@
 
 use hex;
 
+use crate::utils::xor::xor_utilities::xor_with_single_byte_key;
+
 pub fn run(encrypted_xor_input: &str) -> (u8, Vec<u8>) {
     let encrypted_input_bytes = hex::decode(encrypted_xor_input).unwrap();
     return decrypt_single_byte_xor(&encrypted_input_bytes);
@@ -25,16 +27,6 @@ pub fn decrypt_single_byte_xor(input_as_bytes: &Vec<u8>) -> (u8, Vec<u8>) {
     }
 
     (best_key, best_text)
-}
-
-fn xor_with_single_byte_key(a: &Vec<u8>, key: u8) -> Vec<u8> {
-    let mut result = Vec::new();
-
-    for i in 0..a.len() {
-        result.push(a[i] ^ key);
-    }
-
-    return result;
 }
 
 fn score_text(text: &Vec<u8>) -> f64 {

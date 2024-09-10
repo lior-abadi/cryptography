@@ -2,18 +2,9 @@
 
 use hex;
 
-pub fn repeating_key_xor(input: &[u8], key: &[u8]) -> Vec<u8> {
-    let mut cyphertext = vec![];
-
-    for (i, &byte) in input.iter().enumerate() {
-        let key_byte = key[i % key.len()];
-        cyphertext.push(byte ^ key_byte);
-    }
-
-    return cyphertext;
-}
-
 mod tests {
+    use crate::utils::xor::xor_utilities::repeating_key_xor;
+
     use super::*;
 
     #[test]
