@@ -1,15 +1,15 @@
-use super::challenge3::decrypt_single_byte_xor;
-use std::env;
-use std::fs::File;
-use std::io::{self, BufRead};
+use crate::{set1::challenge3::decrypt_single_byte_xor, utils::fs::read_all_inputs_return_lines};
+
 use std::path::Path;
 
 fn run() {
-    let all_inputs = read_all_inputs().unwrap();
+    let current_dir = Path::new("src/set1/challenge4_input.txt");
+    let all_inputs = read_all_inputs_return_lines(current_dir).unwrap();
 
     let mut utf8_matches: Vec<String> = vec![];
     for input in all_inputs.iter() {
-        let (_, plaintext) = super::challenge3::run(input as &str);
+        let inputs = hex::decode(input).unwrap();
+        let (_, plaintext) = decrypt_single_byte_xor(&inputs);
         if let Ok(text) = String::from_utf8(plaintext) {
             utf8_matches.push(text);
         }
@@ -27,24 +27,6 @@ fn run() {
     }
 
     println!("The most sentence-like string is: '{}'", best_match);
-}
-
-fn read_all_inputs() -> io::Result<Vec<String>> {
-    let current_dir = env::current_dir()?.join(Path::new("src/set1"));
-    let text_input_dir = Path::new("challenge4_input.txt");
-
-    let absolute_path = current_dir.join(text_input_dir);
-    // Attempt to open the file and handle any errors
-    let file = match File::open(&absolute_path) {
-        Ok(file) => file,
-        Err(e) => {
-            eprintln!("Failed to open file: {}", e);
-            return Err(e);
-        }
-    };
-
-    let lines: Vec<String> = io::BufReader::new(file).lines().collect::<Result<_, _>>()?;
-    Ok(lines)
 }
 
 fn is_idiomatic_sentence(sentence: &str) -> f64 {

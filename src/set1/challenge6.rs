@@ -1,11 +1,11 @@
 // Break Repeating Key XOR Cypher
 use base64;
 use core::f64;
-use std::io::{self, BufRead};
-use std::{env, fs::File, path::Path};
+
+use std::path::Path;
 
 use super::challenge3::decrypt_single_byte_xor;
-use super::challenge5::repeating_key_xor;
+use crate::utils::xor::xor_utilities::repeating_key_xor;
 
 fn break_xor_cypher(ciphertext: &[u8]) -> (String, String) {
     let mut normalized_distances: Vec<(usize, f64)> = Vec::new();
@@ -109,49 +109,15 @@ fn normalize_hamming_distance(keysize: f64, distance: f64) -> f64 {
     return distance / keysize;
 }
 
-fn bytes_to_bit_array(input: &[u8]) -> Vec<bool> {
-    let mut bits = Vec::new();
-
-    // Convert each byte in the string to its bit representation
-    for byte in input {
-        for i in (0..8).rev() {
-            // Check each bit from the most significant to the least significant
-            bits.push(byte & (1 << i) != 0);
-        }
-    }
-
-    bits
-}
-
-fn read_input() -> io::Result<String> {
-    let current_dir = env::current_dir()?.join(Path::new("src/set1"));
-    let text_input_dir = Path::new("challenge6_input.txt");
-
-    let absolute_path = current_dir.join(text_input_dir);
-    // Attempt to open the file and handle any errors
-    let file = match File::open(&absolute_path) {
-        Ok(file) => file,
-        Err(e) => {
-            eprintln!("Failed to open file: {}", e);
-            return Err(e);
-        }
-    };
-
-    // Read lines and join them into a single string
-    let contents = io::BufReader::new(file)
-        .lines()
-        .collect::<Result<Vec<_>, _>>()? // Collect all lines into a Vec<String>
-        .join(""); // Join all lines
-
-    Ok(contents)
-}
-
 mod tests {
+    use crate::utils::fs::read_input_return_join_lines;
+
     use super::*;
 
     #[test]
     fn test_break_cypher() {
-        let cyphertext_string_b64 = read_input().unwrap();
+        let data_path = Path::new("src/set1/challenge6_input.txt");
+        let cyphertext_string_b64 = read_input_return_join_lines(data_path).unwrap();
         let cyphertext_string = base64::decode(cyphertext_string_b64).unwrap();
         let returns = break_xor_cypher(&cyphertext_string);
         println!("{:?}", returns);
@@ -169,7 +135,8 @@ mod tests {
 
     #[test]
     fn test_read_input() {
-        let cyphertext_string_b64 = read_input().unwrap();
+        let data_path = Path::new("src/set1/challenge6_input.txt");
+        let cyphertext_string_b64 = read_input_return_join_lines(data_path).unwrap();
         let input = base64::decode(cyphertext_string_b64).unwrap();
         println!("{:?}", input);
     }
