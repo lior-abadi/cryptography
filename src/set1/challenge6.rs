@@ -48,15 +48,15 @@ fn break_xor_cypher(ciphertext: &[u8]) -> (String, String) {
 
     // Get the minimum key size based on normalized distances.
     let extracted_data = get_min_keysize_and_distance(&normalized_distances);
-    let cyphertext_blocks = break_cypher_into_transposed_blocks(ciphertext, extracted_data.0);
+    let ciphertext_blocks = break_cypher_into_transposed_blocks(ciphertext, extracted_data.0);
 
     let mut key: Vec<u8> = Vec::new();
-    for block in cyphertext_blocks {
+    for block in ciphertext_blocks {
         let (best_key_candidate, _) = decrypt_single_byte_xor(&block);
         key.push(best_key_candidate);
     }
 
-    // Now that we know the key, we can decrypt the cyphertext
+    // Now that we know the key, we can decrypt the ciphertext
 
     return (
         String::from_utf8_lossy(&key).to_string(),
@@ -115,11 +115,11 @@ mod tests {
     use super::*;
 
     #[test]
-    fn test_break_cypher() {
+    fn test_break_cipher() {
         let data_path = Path::new("src/set1/challenge6_input.txt");
-        let cyphertext_string_b64 = read_input_return_join_lines(data_path).unwrap();
-        let cyphertext_string = base64::decode(cyphertext_string_b64).unwrap();
-        let returns = break_xor_cypher(&cyphertext_string);
+        let ciphertext_string_b64 = read_input_return_join_lines(data_path).unwrap();
+        let ciphertext_string = base64::decode(ciphertext_string_b64).unwrap();
+        let returns = break_xor_cypher(&ciphertext_string);
         println!("{:?}", returns);
     }
 
@@ -136,8 +136,8 @@ mod tests {
     #[test]
     fn test_read_input() {
         let data_path = Path::new("src/set1/challenge6_input.txt");
-        let cyphertext_string_b64 = read_input_return_join_lines(data_path).unwrap();
-        let input = base64::decode(cyphertext_string_b64).unwrap();
+        let ciphertext_string_b64 = read_input_return_join_lines(data_path).unwrap();
+        let input = base64::decode(ciphertext_string_b64).unwrap();
         println!("{:?}", input);
     }
 }
