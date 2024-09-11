@@ -28,12 +28,12 @@ pub fn xor_with_single_byte_key(a: &Vec<u8>, key: u8) -> Vec<u8> {
 }
 
 pub fn repeating_key_xor(input: &[u8], key: &[u8]) -> Vec<u8> {
-    let mut cyphertext = vec![];
+    let mut ciphertext = vec![];
 
     for (i, &byte) in input.iter().enumerate() {
         let key_byte = key[i % key.len()];
-        cyphertext.push(byte ^ key_byte);
+        ciphertext.push(byte ^ key_byte);
     }
 
-    return cyphertext;
+    return ciphertext;
 }
