@@ -13,8 +13,8 @@ pub fn run(hex_input1: &str, hex_input2: &str) -> String {
     // 1  1  0
 
     let xor_result = xor_bytes(
-        hex::decode(hex_input1).unwrap(),
-        hex::decode(hex_input2).unwrap(),
+        &hex::decode(hex_input1).unwrap(),
+        &hex::decode(hex_input2).unwrap(),
     );
     return hex::encode(xor_result);
 }
@@ -40,8 +40,8 @@ mod tests {
         println!(
             "{:?}",
             hex::encode(xor_bytes(
-                hex::decode(hex_input).unwrap(),
-                hex::decode(hex_input2).unwrap()
+                &hex::decode(hex_input).unwrap(),
+                &hex::decode(hex_input2).unwrap()
             ))
         );
     }

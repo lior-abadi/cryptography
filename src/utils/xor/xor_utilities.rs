@@ -2,7 +2,7 @@ pub fn check_symmetry(hex_str1: &Vec<u8>, hex_str2: &Vec<u8>) -> bool {
     return hex_str1.len() == hex_str2.len();
 }
 
-pub fn xor_bytes(a: Vec<u8>, b: Vec<u8>) -> Vec<u8> {
+pub fn xor_bytes(a: &Vec<u8>, b: &Vec<u8>) -> Vec<u8> {
     let is_symmetric = check_symmetry(&a, &b);
     assert!(is_symmetric, "Inputs (buffers) should have equal length");
 
